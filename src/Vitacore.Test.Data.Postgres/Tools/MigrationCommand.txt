@@ -1,0 +1,5 @@
+dotnet ef migrations add <Название миграции> \
+ --project Vitacore.Test.Data.Postgres/Vitacore.Test.Data.Postgres.csproj \
+  --startup-project Vitacore.Test.Web/Vitacore.Test.Web.csproj \
+   --context AppDbContext \
+    --output-dir Migrations \

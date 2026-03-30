@@ -1,0 +1,16 @@
+bin/
+obj/
+
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+.DS_Store
+
+TestResults/
+coverage/
+*.coverage
+*.coveragexml

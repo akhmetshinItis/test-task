@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Vitacore.Test/">
+    <Project Path="Vitacore.Test.Contracts/Vitacore.Test.Contracts.csproj" />
+    <Project Path="Vitacore.Test.Core/Vitacore.Test.Core.csproj" />
+    <Project Path="Vitacore.Test.Data.Postgres/Vitacore.Test.Data.Postgres.csproj" />
+    <Project Path="Vitacore.Test.Infrastructure/Vitacore.Test.Infrastructure.csproj" />
+    <Project Path="Vitacore.Test.Migrator\Vitacore.Test.Migrator.csproj" Type="Classic C#" />
+    <Project Path="Vitacore.Test.Web/Vitacore.Test.Web.csproj" />
+    <File Path="../Dockerfile" />
+  </Folder>
+  <Folder Name="/Vitacore.Test.Tests/">
+    <Project Path="Vitacore.Test.UnitTest/Vitacore.Test.UnitTest.csproj" />
+  </Folder>
+</Solution>
