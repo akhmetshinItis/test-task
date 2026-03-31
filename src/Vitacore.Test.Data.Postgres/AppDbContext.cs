@@ -7,10 +7,10 @@ using Vitacore.Test.Data.Postgres.Identity;
 namespace Vitacore.Test.Data.Postgres
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options)
-        : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
+        : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options), IAppDbContext
     {
-        public DbSet<TangerineLot> TangerineLots {get; set;}
-        public DbSet<Bid> Bids {get; set;}
+        public DbSet<TangerineLot> TangerineLots { get; set; } = null!;
+        public DbSet<Bid> Bids { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

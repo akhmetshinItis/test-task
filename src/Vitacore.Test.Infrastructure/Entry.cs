@@ -9,6 +9,7 @@ using Vitacore.Test.Data.Postgres;
 using Vitacore.Test.Data.Postgres.Identity;
 using Vitacore.Test.Infrastructure.Authentication;
 using Vitacore.Test.Infrastructure.Authentication.Options;
+using Vitacore.Test.Infrastructure.Lots;
 
 namespace Vitacore.Test.Infrastructure
 {
@@ -56,9 +57,11 @@ namespace Vitacore.Test.Infrastructure
                 });
 
             services.AddAuthorization();
+            services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetLotsQueryHandler>());
 
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IAppDbContext>(x => x.GetRequiredService<AppDbContext>());
             services.AddScoped<IdentitySeeder>();
 
             return services;
