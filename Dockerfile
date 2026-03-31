@@ -12,7 +12,6 @@ COPY ["src/Vitacore.Test.Contracts/Vitacore.Test.Contracts.csproj", "src/Vitacor
 COPY ["src/Vitacore.Test.Core/Vitacore.Test.Core.csproj", "src/Vitacore.Test.Core/"]
 COPY ["src/Vitacore.Test.Data.Postgres/Vitacore.Test.Data.Postgres.csproj", "src/Vitacore.Test.Data.Postgres/"]
 COPY ["src/Vitacore.Test.Infrastructure/Vitacore.Test.Infrastructure.csproj", "src/Vitacore.Test.Infrastructure/"]
-COPY ["src/Vitacore.Test.Microservice/Vitacore.Test.Microservice.csproj", "src/Vitacore.Test.Microservice/"]
 COPY ["src/Vitacore.Test.Migrator/Vitacore.Test.Migrator.csproj", "src/Vitacore.Test.Migrator/"]
 RUN dotnet restore "src/Vitacore.Test.Web/Vitacore.Test.Web.csproj"
 COPY . .
