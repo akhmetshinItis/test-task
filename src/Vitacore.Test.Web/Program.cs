@@ -1,26 +1,41 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi;
+using Vitacore.Test.Infrastructure;
 using Vitacore.Test.Web;
 using Vitacore.Test.Web.Configuration;
-using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 const string corsPolicyName = "AllowedOrigins";
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddSwaggerGen(options =>
 {
-    options.AddPolicy(corsPolicyName, policy =>
+    const string schemeId = "bearer";
+
+    options.SwaggerDoc("v1", new()
     {
-        policy
-            .WithOrigins(
-                "https://dev.api.d4rq.ru", //TODO вынести в конфиги
-                "https://api.d4rq.ru")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        Title = "Vitacore.Test API",
+        Version = "v1"
+    });
+
+    options.AddSecurityDefinition(schemeId, new OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Description = "JWT Authorization header using the Bearer scheme.",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT"
+    });
+
+    options.AddSecurityRequirement(document => new()
+    {
+        [new OpenApiSecuritySchemeReference(schemeId, document)] = []
     });
 });
 
@@ -29,31 +44,20 @@ startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+await app.Services.SeedIdentityAsync();
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-        c.PreSerializeFilters.Add((swagger, httpReq) =>
-        {
-            var prefix = httpReq.Headers["X-Forwarded-Prefix"].FirstOrDefault() ?? "";
+    app.UseSwagger();
 
-            swagger.Servers = new List<OpenApiServer>
-            {
-                new OpenApiServer
-                {
-                    Url = $"{httpReq.Scheme}://{httpReq.Host}{prefix}"
-                }
-            };
-        });
-    });
     app.UseSwaggerUI();
 }
 
 app.UseCors(corsPolicyName);
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

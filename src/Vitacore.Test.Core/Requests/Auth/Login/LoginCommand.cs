@@ -7,6 +7,9 @@ namespace Vitacore.Test.Core.Requests.Auth.Login
     {
         public LoginCommand(LoginRequest request)
         {
+            Request = request ?? throw new ArgumentNullException(nameof(request));
         }
+
+        public LoginRequest Request { get; }
     }
 }
