@@ -2,7 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Vitacore.Test.Contracts.Requests.Lots.GetLotById;
 using Vitacore.Test.Contracts.Requests.Lots.GetLots;
+using Vitacore.Test.Core.Requests.Lots.GetLotById;
 using Vitacore.Test.Core.Requests.Lots.GetLots;
 
 namespace Vitacore.Test.Web.Controllers
@@ -17,5 +19,14 @@ namespace Vitacore.Test.Web.Controllers
             [FromQuery] GetLotsRequest request,
             CancellationToken cancellationToken)
             => await mediator.Send(new GetLotsQuery(request), cancellationToken);
+
+        [AllowAnonymous]
+        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(GetLotByIdResponse))]
+        [HttpGet("{id:guid}")]
+        public async Task<GetLotByIdResponse> GetLotByIdAsync(
+            [FromServices] IMediator mediator,
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+            => await mediator.Send(new GetLotByIdQuery(id), cancellationToken);
     }
 }
