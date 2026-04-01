@@ -7,5 +7,7 @@ namespace Vitacore.Test.Data.Postgres
     {
         DbSet<TangerineLot> TangerineLots { get; }
         DbSet<Bid> Bids { get; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        void ClearChangeTracker();
     }
 }
