@@ -1,11 +1,11 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Vitacore.Test.Core;
 using Vitacore.Test.Contracts.Requests.Lots.PlaceBid;
+using Vitacore.Test.Core.Entities;
+using Vitacore.Test.Core.Enums;
 using Vitacore.Test.Core.Exceptions;
 using Vitacore.Test.Core.Requests.Lots.PlaceBid;
-using Vitacore.Test.Data.Postgres;
-using Vitacore.Test.Data.Postgres.Entities;
-using Vitacore.Test.Data.Postgres.Enums;
 
 namespace Vitacore.Test.Infrastructure.Lots
 {

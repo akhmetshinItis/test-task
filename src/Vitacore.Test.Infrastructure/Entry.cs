@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Vitacore.Test.Core;
 using Vitacore.Test.Core.Interfaces.Auth;
 using Vitacore.Test.Data.Postgres;
 using Vitacore.Test.Data.Postgres.Identity;
+using Vitacore.Test.Infrastructure.Background.Jobs;
 using Vitacore.Test.Infrastructure.Authentication;
 using Vitacore.Test.Infrastructure.Authentication.Options;
 using Vitacore.Test.Infrastructure.Lots;
@@ -62,6 +64,8 @@ namespace Vitacore.Test.Infrastructure
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IAppDbContext>(x => x.GetRequiredService<AppDbContext>());
+            services.AddScoped<CompleteEndedAuctionsJob>();
+            services.AddScoped<CleanupExpiredLotsJob>();
             services.AddScoped<IdentitySeeder>();
 
             return services;

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vitacore.Test.Data.Postgres.Entities;
+using Vitacore.Test.Core.Entities;
 using Vitacore.Test.Data.Postgres.Identity;
 
 namespace Vitacore.Test.Data.Postgres.Configurations

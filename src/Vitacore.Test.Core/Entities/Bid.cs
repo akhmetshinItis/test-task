@@ -1,6 +1,6 @@
-using Vitacore.Test.Data.Postgres.Abstractions;
+using Vitacore.Test.Core.Abstractions;
 
-namespace Vitacore.Test.Data.Postgres.Entities
+namespace Vitacore.Test.Core.Entities
 {
     public class Bid : BaseEntity
     {

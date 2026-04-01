@@ -1,4 +1,4 @@
-namespace Vitacore.Test.Data.Postgres.Enums
+namespace Vitacore.Test.Core.Enums
 {
     public enum PurchaseType
     {

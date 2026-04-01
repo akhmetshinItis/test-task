@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Vitacore.Test.Data.Postgres.Entities;
+using Vitacore.Test.Core.Entities;
 
-namespace Vitacore.Test.Data.Postgres
+namespace Vitacore.Test.Core
 {
     public interface IAppDbContext
     {

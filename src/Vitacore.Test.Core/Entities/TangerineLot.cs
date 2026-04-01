@@ -1,7 +1,7 @@
-using Vitacore.Test.Data.Postgres.Abstractions;
-using Vitacore.Test.Data.Postgres.Enums;
+using Vitacore.Test.Core.Abstractions;
+using Vitacore.Test.Core.Enums;
 
-namespace Vitacore.Test.Data.Postgres.Entities
+namespace Vitacore.Test.Core.Entities
 {
     public class TangerineLot : BaseEntity
     {

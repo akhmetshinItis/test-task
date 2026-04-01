@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vitacore.Test.Data.Postgres.Abstractions;
+using Vitacore.Test.Core.Abstractions;
 
 namespace Vitacore.Test.Data.Postgres.Configurations
 {

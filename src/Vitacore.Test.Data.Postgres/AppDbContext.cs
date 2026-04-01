@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Vitacore.Test.Data.Postgres.Entities;
+using Vitacore.Test.Core;
+using Vitacore.Test.Core.Entities;
 using Vitacore.Test.Data.Postgres.Identity;
 
 namespace Vitacore.Test.Data.Postgres

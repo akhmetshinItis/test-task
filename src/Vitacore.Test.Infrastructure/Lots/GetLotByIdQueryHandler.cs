@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Vitacore.Test.Core;
 using Vitacore.Test.Contracts.Requests.Lots.GetLotById;
 using Vitacore.Test.Core.Exceptions;
+using Vitacore.Test.Core.Entities;
 using Vitacore.Test.Core.Requests.Lots.GetLotById;
-using Vitacore.Test.Data.Postgres;
-using Vitacore.Test.Data.Postgres.Entities;
 
 namespace Vitacore.Test.Infrastructure.Lots
 {

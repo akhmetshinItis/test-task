@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Vitacore.Test.Core;
 using Vitacore.Test.Contracts.Requests.Lots.GetLots;
 using Vitacore.Test.Core.Requests.Lots.GetLots;
-using Vitacore.Test.Data.Postgres;
 using Vitacore.Test.Infrastructure.Extensions;
 
 namespace Vitacore.Test.Infrastructure.Lots

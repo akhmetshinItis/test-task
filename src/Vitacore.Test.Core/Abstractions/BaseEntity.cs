@@ -1,4 +1,4 @@
-namespace Vitacore.Test.Data.Postgres.Abstractions
+namespace Vitacore.Test.Core.Abstractions
 {
     public abstract class BaseEntity
     {

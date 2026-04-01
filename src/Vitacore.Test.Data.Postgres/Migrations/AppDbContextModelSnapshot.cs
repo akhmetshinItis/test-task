@@ -184,7 +184,7 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Vitacore.Test.Data.Postgres.Entities.Bid", b =>
+            modelBuilder.Entity("Vitacore.Test.Core.Entities.Bid", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -226,7 +226,7 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Vitacore.Test.Data.Postgres.Entities.TangerineLot", b =>
+            modelBuilder.Entity("Vitacore.Test.Core.Entities.TangerineLot", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -476,9 +476,9 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("Vitacore.Test.Data.Postgres.Entities.Bid", b =>
+            modelBuilder.Entity("Vitacore.Test.Core.Entities.Bid", b =>
                 {
-                    b.HasOne("Vitacore.Test.Data.Postgres.Entities.TangerineLot", "Lot")
+                    b.HasOne("Vitacore.Test.Core.Entities.TangerineLot", "Lot")
                         .WithMany("Bids")
                         .HasForeignKey("LotId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -495,7 +495,7 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                     b.Navigation("Lot");
                 });
 
-            modelBuilder.Entity("Vitacore.Test.Data.Postgres.Entities.TangerineLot", b =>
+            modelBuilder.Entity("Vitacore.Test.Core.Entities.TangerineLot", b =>
                 {
                     b.HasOne("Vitacore.Test.Data.Postgres.Identity.ApplicationUser", null)
                         .WithMany()
@@ -510,7 +510,7 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                         .HasConstraintName("fk_tangerine_lots_asp_net_users_current_leader_user_id");
                 });
 
-            modelBuilder.Entity("Vitacore.Test.Data.Postgres.Entities.TangerineLot", b =>
+            modelBuilder.Entity("Vitacore.Test.Core.Entities.TangerineLot", b =>
                 {
                     b.Navigation("Bids");
                 });
