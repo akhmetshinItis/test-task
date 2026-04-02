@@ -1,7 +1,6 @@
 using System.Net;
 using Vitacore.Test.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Vitacore.Test.Web.Configuration
 {
@@ -35,6 +34,9 @@ namespace Vitacore.Test.Web.Configuration
         {
             switch (exception)
             {
+                case AuthenticationException authenticationException:
+                    await HandleAuthenticationExceptionAsync(context, authenticationException);
+                    break;
                 case UnauthorizedAccessException accessException:
                     await HandleUnauthorizedAccessExceptionAsync(context, accessException);
                     break;
@@ -76,21 +78,14 @@ namespace Vitacore.Test.Web.Configuration
             };
 
             foreach (var detail in details)
-                response.Extensions.Add(detail.Key, detail.Value);
-
-            var jsonOptions = context.RequestServices.GetRequiredService<IOptions<JsonOptions>>();
-           
-            var problemDetails = new ProblemDetails
             {
-                Title = "error",
-                Detail = exception.Message,
-                Status = (int)responseCode,
-                Type = exception.GetType().FullName,
-            };
-            
-            // await context.Response.WriteAsync(
-            //     JsonSerializer.Serialize(response, jsonOptions.Value.JsonSerializerOptions));
-            await context.Response.WriteAsJsonAsync(problemDetails);
+                response.Extensions.Add(detail.Key, detail.Value);
+            }
+
+            response.Detail = exception.Message;
+            response.Type = exception.GetType().FullName;
+
+            await context.Response.WriteAsJsonAsync(response);
         }
         
         /// <summary>
@@ -118,6 +113,20 @@ namespace Vitacore.Test.Web.Configuration
             var errorText = "Доступ к запрашиваемому ресурсу ограничен";
             var logLevel = LogLevel.Warning;
             var responseCode = HttpStatusCode.Forbidden;
+            await LogAndReturnAsync(context, exception, errorText, responseCode, logLevel);
+        }
+
+        /// <summary>
+        /// Обработка исключения <see cref="AuthenticationException"/>
+        /// </summary>
+        /// <param name="context">Контекст запроса ASP.NET</param>
+        /// <param name="exception">Исключение</param>
+        /// <returns>Задача на обработку запроса ASP.NET</returns>
+        private async Task HandleAuthenticationExceptionAsync(HttpContext context, AuthenticationException exception)
+        {
+            var errorText = exception.Message;
+            var logLevel = LogLevel.Warning;
+            var responseCode = HttpStatusCode.Unauthorized;
             await LogAndReturnAsync(context, exception, errorText, responseCode, logLevel);
         }
 

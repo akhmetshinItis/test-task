@@ -15,6 +15,15 @@ namespace Vitacore.Test.Data.Postgres.Configurations
                 .ValueGeneratedOnAdd()
                 .HasDefaultValueSql("gen_random_uuid()");
 
+            if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TEntity)))
+            {
+                builder.Property<bool>(nameof(ISoftDeletable.IsDeleted))
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                builder.Property<DateTime?>(nameof(ISoftDeletable.DeletedAt));
+            }
+
             ConfigureEntity(builder);
         }
 

@@ -89,6 +89,11 @@ namespace Vitacore.Test.Infrastructure.Lots
                 throw new AppException("Для этого лота выкуп недоступен.");
             }
 
+            if (lot.CurrentPrice >= lot.BuyoutPrice.Value)
+            {
+                throw new AppException("Выкуп недоступен, потому что текущая ставка достигла или превысила цену выкупа.");
+            }
+
             if (lot.AuctionStartAt > now)
             {
                 throw new AppException("Аукцион для этого лота еще не начался.");

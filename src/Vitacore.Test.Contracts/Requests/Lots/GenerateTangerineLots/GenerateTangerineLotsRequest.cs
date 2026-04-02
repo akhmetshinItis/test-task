@@ -7,7 +7,7 @@ namespace Vitacore.Test.Contracts.Requests.Lots.GenerateTangerineLots
         public string Description { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public decimal StartPrice { get; set; }
-        public decimal BuyoutPrice { get; set; }
+        public decimal? BuyoutPrice { get; set; }
         public DateTime AuctionStartAt { get; set; }
         public DateTime AuctionEndAt { get; set; }
         public DateTime ExpirationAt { get; set; }

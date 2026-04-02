@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Vitacore.Test.Contracts.Requests.Auth.Login;
 using Vitacore.Test.Contracts.Requests.Auth.Register;
 using Vitacore.Test.Core.Authorization;
@@ -96,7 +95,7 @@ namespace Vitacore.Test.Infrastructure.Authentication
                 return null;
             }
 
-            return await _userManager.Users.FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
+            return await _userManager.FindByEmailAsync(normalizedEmail);
         }
     }
 }

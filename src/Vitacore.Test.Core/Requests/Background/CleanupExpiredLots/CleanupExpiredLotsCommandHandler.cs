@@ -15,14 +15,23 @@ namespace Vitacore.Test.Core.Requests.Background.CleanupExpiredLots
         public async Task<CleanupExpiredLotsResult> Handle(CleanupExpiredLotsCommand request, CancellationToken cancellationToken)
         {
             var now = DateTime.UtcNow;
-
-            var deletedLotsCount = await _dbContext.TangerineLots
+            var expiredLots = await _dbContext.TangerineLots
                 .Where(x => x.ExpirationAt < now)
-                .ExecuteDeleteAsync(cancellationToken);
+                .ToListAsync(cancellationToken);
+
+            foreach (var lot in expiredLots)
+            {
+                lot.MarkAsDeleted(now);
+            }
+
+            if (expiredLots.Count > 0)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
 
             return new CleanupExpiredLotsResult
             {
-                DeletedLotsCount = deletedLotsCount
+                DeletedLotsCount = expiredLots.Count
             };
         }
     }

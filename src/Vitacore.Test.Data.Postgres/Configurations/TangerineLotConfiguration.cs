@@ -84,6 +84,7 @@ namespace Vitacore.Test.Data.Postgres.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(x => x.ExpirationAt);
+            builder.HasIndex(x => new { x.IsDeleted, x.ExpirationAt });
         }
     }
 }

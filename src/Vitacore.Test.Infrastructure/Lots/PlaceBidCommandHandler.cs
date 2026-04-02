@@ -118,6 +118,11 @@ namespace Vitacore.Test.Infrastructure.Lots
             {
                 throw new AppException("Ставка должна быть больше текущей цены.");
             }
+
+            if (lot.BuyoutPrice.HasValue && amount >= lot.BuyoutPrice.Value)
+            {
+                throw new AppException("Ставка должна быть меньше цены выкупа. Для покупки по этой цене используйте выкуп.");
+            }
         }
     }
 }

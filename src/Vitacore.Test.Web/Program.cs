@@ -7,7 +7,6 @@ using Vitacore.Test.Web;
 using Vitacore.Test.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-const string corsPolicyName = "AllowedOrigins";
 var hangfireOptions = builder.Configuration
     .GetSection(HangfireOptions.SectionName)
     .Get<HangfireOptions>()
@@ -86,7 +85,7 @@ if (app.Environment.IsDevelopment())
 
     app.UseSwaggerUI();
 }
-app.UseCors(corsPolicyName);
+
 app.UseAuthentication();
 app.UseAuthorization();
 

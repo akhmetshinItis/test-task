@@ -4,7 +4,7 @@ using Vitacore.Test.Core.Exceptions;
 
 namespace Vitacore.Test.Core.Entities
 {
-    public class TangerineLot : BaseEntity
+    public class TangerineLot : SoftDeletableEntity
     {
         private readonly decimal _startPrice;
         private decimal _currentPrice;
