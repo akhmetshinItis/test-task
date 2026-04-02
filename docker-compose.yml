@@ -49,10 +49,7 @@ services:
       - "8025:8025"
 
   migrator:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: migrator
+    image: bahlish/test-task-migrator:latest
     container_name: vitacore-migrator
     depends_on:
       postgres:
@@ -64,10 +61,7 @@ services:
     restart: "no"
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: web
+    image: bahlish/test-task-web:latest
     container_name: vitacore-web
     restart: unless-stopped
     depends_on:

@@ -1,0 +1,31 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+COPY ["global.json", "./"]
+COPY ["src/Vitacore.Test.Contracts/Vitacore.Test.Contracts.csproj", "src/Vitacore.Test.Contracts/"]
+COPY ["src/Vitacore.Test.Core/Vitacore.Test.Core.csproj", "src/Vitacore.Test.Core/"]
+COPY ["src/Vitacore.Test.Data.Postgres/Vitacore.Test.Data.Postgres.csproj", "src/Vitacore.Test.Data.Postgres/"]
+COPY ["src/Vitacore.Test.Migrator/Vitacore.Test.Migrator.csproj", "src/Vitacore.Test.Migrator/"]
+COPY ["src/Vitacore.Test.Web/appsettings.json", "src/Vitacore.Test.Web/"]
+COPY ["src/Vitacore.Test.Web/appsettings.Development.json", "src/Vitacore.Test.Web/"]
+
+RUN dotnet restore "src/Vitacore.Test.Migrator/Vitacore.Test.Migrator.csproj"
+
+COPY . .
+
+RUN dotnet publish "src/Vitacore.Test.Migrator/Vitacore.Test.Migrator.csproj" \
+    -c $BUILD_CONFIGURATION \
+    -o /app/publish \
+    /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS final
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "Vitacore.Test.Migrator.dll"]
