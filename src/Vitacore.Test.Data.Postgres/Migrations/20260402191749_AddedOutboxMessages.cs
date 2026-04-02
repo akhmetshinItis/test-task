@@ -1,12 +1,14 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Vitacore.Test.Data.Postgres.Migrations
 {
+    /// <inheritdoc />
     public partial class AddedOutboxMessages : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -37,6 +39,7 @@ namespace Vitacore.Test.Data.Postgres.Migrations
                 column: "next_attempt_at");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

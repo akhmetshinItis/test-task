@@ -5,6 +5,7 @@ using Vitacore.Test.Contracts.Requests.Lots.PlaceBid;
 using Vitacore.Test.Core.Entities;
 using Vitacore.Test.Core.Enums;
 using Vitacore.Test.Core.Exceptions;
+using Vitacore.Test.Core.Requests.Email.SendOutbidEmail;
 using Vitacore.Test.Core.Requests.Lots.PlaceBid;
 
 namespace Vitacore.Test.Infrastructure.Lots
@@ -39,6 +40,8 @@ namespace Vitacore.Test.Infrastructure.Lots
 
                 ValidateBid(lot, request.Request.Amount);
 
+                var previousLeaderUserId = lot.CurrentLeaderUserId;
+
                 var bid = new Bid
                 {
                     LotId = lot.Id,
@@ -51,6 +54,17 @@ namespace Vitacore.Test.Infrastructure.Lots
                 lot.CurrentLeaderUserId = request.UserId;
 
                 _dbContext.Bids.Add(bid);
+
+                if (previousLeaderUserId.HasValue && previousLeaderUserId.Value != request.UserId)
+                {
+                    _dbContext.OutboxMessages.Add(new OutboxMessage(
+                        new SendOutbidEmailCommand(
+                            previousLeaderUserId.Value,
+                            lot.Id,
+                            lot.Title,
+                            request.Request.Amount,
+                            bid.CreatedAt)));
+                }
 
                 try
                 {

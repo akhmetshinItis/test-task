@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Vitacore.Test.Core.Entities;
 using Vitacore.Test.Core.Enums;
+using Vitacore.Test.Core.Requests.Email.SendLotReceiptEmail;
 
 namespace Vitacore.Test.Core.Requests.Background.CompleteEndedAuctions
 {
@@ -16,24 +18,46 @@ namespace Vitacore.Test.Core.Requests.Background.CompleteEndedAuctions
         public async Task<CompleteEndedAuctionsResult> Handle(CompleteEndedAuctionsCommand request, CancellationToken cancellationToken)
         {
             var now = DateTime.UtcNow;
+            var completedLots = await _dbContext.TangerineLots
+                .Where(x => x.Status == LotStatus.Active && x.AuctionEndAt <= now)
+                .ToListAsync(cancellationToken);
 
-            var soldLotsCount = await _dbContext.TangerineLots
-                .Where(x => x.Status == LotStatus.Active && x.AuctionEndAt <= now && x.CurrentLeaderUserId.HasValue)
-                .ExecuteUpdateAsync(setters => setters
-                        .SetProperty(x => x.Status, LotStatus.Sold)
-                        .SetProperty(x => x.BuyerId, x => x.CurrentLeaderUserId)
-                        .SetProperty(x => x.PurchaseType, PurchaseType.AuctionWin)
-                        .SetProperty(x => x.ClosedAt, now),
-                    cancellationToken);
+            var soldLotsCount = 0;
+            var completedWithoutWinnerLotsCount = 0;
 
-            var completedWithoutWinnerLotsCount = await _dbContext.TangerineLots
-                .Where(x => x.Status == LotStatus.Active && x.AuctionEndAt <= now && !x.CurrentLeaderUserId.HasValue)
-                .ExecuteUpdateAsync(setters => setters
-                        .SetProperty(x => x.Status, LotStatus.CompletedWithoutWinner)
-                        .SetProperty(x => x.BuyerId, x => null)
-                        .SetProperty(x => x.PurchaseType, x => null)
-                        .SetProperty(x => x.ClosedAt, now),
-                    cancellationToken);
+            foreach (var lot in completedLots)
+            {
+                lot.ClosedAt = now;
+
+                if (lot.CurrentLeaderUserId.HasValue)
+                {
+                    lot.Status = LotStatus.Sold;
+                    lot.BuyerId = lot.CurrentLeaderUserId;
+                    lot.PurchaseType = PurchaseType.AuctionWin;
+
+                    _dbContext.OutboxMessages.Add(new OutboxMessage(
+                        new SendLotReceiptEmailCommand(
+                            lot.CurrentLeaderUserId.Value,
+                            lot.Id,
+                            lot.Title,
+                            lot.CurrentPrice,
+                            PurchaseType.AuctionWin,
+                            now)));
+
+                    soldLotsCount++;
+                    continue;
+                }
+
+                lot.Status = LotStatus.CompletedWithoutWinner;
+                lot.BuyerId = null;
+                lot.PurchaseType = null;
+                completedWithoutWinnerLotsCount++;
+            }
+
+            if (completedLots.Count > 0)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
 
             return new CompleteEndedAuctionsResult
             {
