@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vitacore.Test.Migrator", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vitacore.Test.Web", "src\Vitacore.Test.Web\Vitacore.Test.Web.csproj", "{82A852F6-3D32-4C81-8172-D7A2E8B340E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vitacore.Test.UnitTest", "src\Vitacore.Test.UnitTest\Vitacore.Test.UnitTest.csproj", "{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,18 +96,6 @@ Global
 		{82A852F6-3D32-4C81-8172-D7A2E8B340E0}.Release|x64.Build.0 = Release|Any CPU
 		{82A852F6-3D32-4C81-8172-D7A2E8B340E0}.Release|x86.ActiveCfg = Release|Any CPU
 		{82A852F6-3D32-4C81-8172-D7A2E8B340E0}.Release|x86.Build.0 = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|x64.Build.0 = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Debug|x86.Build.0 = Debug|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|x64.ActiveCfg = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|x64.Build.0 = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|x86.ActiveCfg = Release|Any CPU
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,6 +107,5 @@ Global
 		{27EDAA88-8845-45FE-8CCF-0D50AD739E16} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{397C5B5C-6037-4BA0-91F2-7356B6CED3FA} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{82A852F6-3D32-4C81-8172-D7A2E8B340E0} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{D5238FBC-A6B6-4373-B4D5-F407CF075EB0} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
