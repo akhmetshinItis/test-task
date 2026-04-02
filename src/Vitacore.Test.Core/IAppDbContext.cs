@@ -7,6 +7,7 @@ namespace Vitacore.Test.Core
     {
         DbSet<TangerineLot> TangerineLots { get; }
         DbSet<Bid> Bids { get; }
+        DbSet<OutboxMessage> OutboxMessages { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         void ClearChangeTracker();
     }

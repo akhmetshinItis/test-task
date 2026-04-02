@@ -12,6 +12,7 @@ namespace Vitacore.Test.Data.Postgres
     {
         public DbSet<TangerineLot> TangerineLots { get; set; } = null!;
         public DbSet<Bid> Bids { get; set; } = null!;
+        public DbSet<OutboxMessage> OutboxMessages { get; set; } = null!;
 
         public void ClearChangeTracker()
             => ChangeTracker.Clear();

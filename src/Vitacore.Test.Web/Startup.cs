@@ -4,6 +4,7 @@ using Vitacore.Test.Core;
 using Vitacore.Test.Core.Options;
 using Vitacore.Test.Data.Postgres;
 using Vitacore.Test.Infrastructure;
+using Vitacore.Test.Infrastructure.Email.Options;
 using Vitacore.Test.Web.Configuration;
 
 namespace Vitacore.Test.Web
@@ -25,8 +26,10 @@ namespace Vitacore.Test.Web
                 .GetSection(TangerineLotGenerationOptions.SectionName)
                 .Get<TangerineLotGenerationOptions>()
                 ?? new TangerineLotGenerationOptions();
+            var emailOptions = BuildEmailOptions();
 
             services.AddSingleton(tangerineLotGenerationOptions);
+            services.AddSingleton(emailOptions);
 
             return services
                 .AddCore()
@@ -72,6 +75,25 @@ namespace Vitacore.Test.Web
             });
 
             return services;
+        }
+
+        private EmailOptions BuildEmailOptions()
+        {
+            var section = _configuration.GetSection(EmailOptions.SectionName);
+
+            return new EmailOptions
+            {
+                Host = section["Host"] ?? throw new ArgumentNullException("Email:Host"),
+                Port = int.TryParse(section["Port"], out var port)
+                    ? port
+                    : throw new ArgumentNullException("Email:Port"),
+                EnableSsl = bool.TryParse(section["EnableSsl"], out var enableSsl) && enableSsl,
+                UseDefaultCredentials = bool.TryParse(section["UseDefaultCredentials"], out var useDefaultCredentials) && useDefaultCredentials,
+                UserName = section["UserName"],
+                Password = section["Password"],
+                FromAddress = section["FromAddress"] ?? throw new ArgumentNullException("Email:FromAddress"),
+                FromName = section["FromName"]
+            };
         }
     }
 }

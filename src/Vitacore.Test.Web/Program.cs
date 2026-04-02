@@ -60,18 +60,23 @@ if (hangfireOptions.EnableDashboard)
     app.UseHangfireDashboard(hangfireOptions.DashboardPath);
 }
 
+RecurringJob.AddOrUpdate<ProcessOutboxMessagesJob>(
+    HangfireJobNameConstants.ProcessOutboxMessages,
+    job => job.ExecuteAsync(),
+    hangfireOptions.ProcessOutboxMessagesCron);
+
 RecurringJob.AddOrUpdate<CompleteEndedAuctionsJob>(
-    "auctions:complete-ended",
+    HangfireJobNameConstants.CompleteEndedAuctions,
     job => job.ExecuteAsync(),
     hangfireOptions.CompleteEndedAuctionsCron);
 
 RecurringJob.AddOrUpdate<CleanupExpiredLotsJob>(
-    "lots:cleanup-expired",
+    HangfireJobNameConstants.CleanupExpiredLots,
     job => job.ExecuteAsync(),
     hangfireOptions.CleanupExpiredLotsCron);
 
 RecurringJob.AddOrUpdate<GenerateTangerineLotsJob>(
-    "lots:generate",
+    HangfireJobNameConstants.GenerateTangerineLots,
     job => job.ExecuteAsync(),
     hangfireOptions.GenerateTangerineLotsCron);
 
