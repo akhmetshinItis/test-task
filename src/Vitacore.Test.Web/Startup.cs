@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Vitacore.Test.Core;
+using Vitacore.Test.Core.Options;
 using Vitacore.Test.Data.Postgres;
 using Vitacore.Test.Infrastructure;
 using Vitacore.Test.Web.Configuration;
@@ -19,10 +20,19 @@ namespace Vitacore.Test.Web
         }
         
         public IServiceCollection ConfigureServices(IServiceCollection services)
-            => services
+        {
+            var tangerineLotGenerationOptions = _configuration
+                .GetSection(TangerineLotGenerationOptions.SectionName)
+                .Get<TangerineLotGenerationOptions>()
+                ?? new TangerineLotGenerationOptions();
+
+            services.AddSingleton(tangerineLotGenerationOptions);
+
+            return services
                 .AddCore()
                 .AddPostgres(_configuration["Application:DbConnectionString"] ?? throw new ArgumentNullException())
                 .AddInfrastructure(_configuration);
+        }
 
         public IServiceCollection ConfigureHangfire(IServiceCollection services)
         {

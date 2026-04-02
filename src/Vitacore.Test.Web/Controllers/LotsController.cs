@@ -5,10 +5,13 @@ using Swashbuckle.AspNetCore.Annotations;
 using Vitacore.Test.Contracts.Requests.Lots.GetLotById;
 using Vitacore.Test.Contracts.Requests.Lots.GetLotBids;
 using Vitacore.Test.Contracts.Requests.Lots.GetLots;
+using Vitacore.Test.Contracts.Requests.Lots.GenerateTangerineLots;
 using Vitacore.Test.Contracts.Requests.Lots.PlaceBid;
+using Vitacore.Test.Core.Authorization;
 using Vitacore.Test.Core.Requests.Lots.GetLotById;
 using Vitacore.Test.Core.Requests.Lots.GetLotBids;
 using Vitacore.Test.Core.Requests.Lots.GetLots;
+using Vitacore.Test.Core.Requests.Lots.GenerateTangerineLots;
 using Vitacore.Test.Core.Requests.Lots.PlaceBid;
 
 namespace Vitacore.Test.Web.Controllers
@@ -32,6 +35,17 @@ namespace Vitacore.Test.Web.Controllers
             [FromRoute] Guid id,
             CancellationToken cancellationToken)
             => await mediator.Send(new GetLotByIdQuery(id), cancellationToken);
+
+        [Authorize(Roles = ApplicationRoles.Admin)]
+        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(GenerateTangerineLotsResponse))]
+        [HttpPost("generate")]
+        public async Task<GenerateTangerineLotsResponse> GenerateTangerineLotsAsync(
+            [FromServices] IMediator mediator,
+            [FromBody] GenerateTangerineLotsRequest request,
+            CancellationToken cancellationToken)
+            => await mediator.Send(
+                new GenerateTangerineLotsCommand(request),
+                cancellationToken);
 
         [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, type: typeof(GetLotBidsResponse))]

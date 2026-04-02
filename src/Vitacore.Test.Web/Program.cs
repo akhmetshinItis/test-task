@@ -63,12 +63,17 @@ if (hangfireOptions.EnableDashboard)
 RecurringJob.AddOrUpdate<CompleteEndedAuctionsJob>(
     "auctions:complete-ended",
     job => job.ExecuteAsync(),
-    Cron.Minutely());
+    hangfireOptions.CompleteEndedAuctionsCron);
 
 RecurringJob.AddOrUpdate<CleanupExpiredLotsJob>(
     "lots:cleanup-expired",
     job => job.ExecuteAsync(),
-    Cron.Daily());
+    hangfireOptions.CleanupExpiredLotsCron);
+
+RecurringJob.AddOrUpdate<GenerateTangerineLotsJob>(
+    "lots:generate",
+    job => job.ExecuteAsync(),
+    hangfireOptions.GenerateTangerineLotsCron);
 
 if (app.Environment.IsDevelopment())
 {

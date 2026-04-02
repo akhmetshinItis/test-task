@@ -66,6 +66,7 @@ namespace Vitacore.Test.Infrastructure
             services.AddScoped<IAppDbContext>(x => x.GetRequiredService<AppDbContext>());
             services.AddScoped<CompleteEndedAuctionsJob>();
             services.AddScoped<CleanupExpiredLotsJob>();
+            services.AddScoped<GenerateTangerineLotsJob>();
             services.AddScoped<IdentitySeeder>();
 
             return services;
