@@ -1,0 +1,490 @@
+{
+  "info": {
+    "_postman_id": "c140ad8f-5d5f-4fd6-a3b3-4f6b8b0bb221",
+    "name": "Vitacore.Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "mailhogUrl", "value": "http://localhost:8025" },
+    { "key": "adminEmail", "value": "admin@vitacore.test" },
+    { "key": "adminPassword", "value": "Admin123" },
+    { "key": "bidder1Email", "value": "bidder1@vitacore.test" },
+    { "key": "bidder1Password", "value": "Password1" },
+    { "key": "bidder2Email", "value": "bidder2@vitacore.test" },
+    { "key": "bidder2Password", "value": "Password1" },
+    { "key": "buyerEmail", "value": "buyer1@vitacore.test" },
+    { "key": "buyerPassword", "value": "Password1" },
+    { "key": "seedBidLotId", "value": "10000000-0000-0000-0000-000000000001" },
+    { "key": "seedBuyoutLotId", "value": "10000000-0000-0000-0000-000000000002" },
+    { "key": "seedEndedWinnerLotId", "value": "10000000-0000-0000-0000-000000000003" },
+    { "key": "seedEndedWithoutWinnerLotId", "value": "10000000-0000-0000-0000-000000000004" },
+    { "key": "seedExpiredSpoiledLotId", "value": "10000000-0000-0000-0000-000000000005" }
+  ],
+  "item": [
+    {
+      "name": "Подготовка данных",
+      "item": [
+        {
+          "name": "Register Bidder 1",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"bidder1\",\n  \"email\": \"{{bidder1Email}}\",\n  \"password\": \"{{bidder1Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/register"
+          }
+        },
+        {
+          "name": "Register Bidder 2",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"bidder2\",\n  \"email\": \"{{bidder2Email}}\",\n  \"password\": \"{{bidder2Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/register"
+          }
+        },
+        {
+          "name": "Register Buyer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"buyer1\",\n  \"email\": \"{{buyerEmail}}\",\n  \"password\": \"{{buyerPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/register"
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('adminToken', json.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Bidder 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('bidder1Token', json.accessToken);",
+                  "pm.collectionVariables.set('bidder1UserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{bidder1Email}}\",\n  \"password\": \"{{bidder1Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Bidder 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('bidder2Token', json.accessToken);",
+                  "pm.collectionVariables.set('bidder2UserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{bidder2Email}}\",\n  \"password\": \"{{bidder2Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Buyer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('buyerToken', json.accessToken);",
+                  "pm.collectionVariables.set('buyerUserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{buyerEmail}}\",\n  \"password\": \"{{buyerPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('adminToken', json.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Bidder 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('bidder1Token', json.accessToken);",
+                  "pm.collectionVariables.set('bidder1UserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{bidder1Email}}\",\n  \"password\": \"{{bidder1Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Bidder 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('bidder2Token', json.accessToken);",
+                  "pm.collectionVariables.set('bidder2UserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{bidder2Email}}\",\n  \"password\": \"{{bidder2Password}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Login Buyer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('buyerToken', json.accessToken);",
+                  "pm.collectionVariables.set('buyerUserId', json.userId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{buyerEmail}}\",\n  \"password\": \"{{buyerPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/Authentication/login"
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{bidder1Token}}" }],
+            "url": "{{baseUrl}}/Authentication/me"
+          }
+        },
+        {
+          "name": "Admin Only Check",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Authentication/admin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lots",
+      "item": [
+        {
+          "name": "Get Lots",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots?page=1&pageSize=20&orderBy=CreatedAt&isAsc=false"
+          }
+        },
+        {
+          "name": "Get Seed Bid Lot",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedBidLotId}}"
+          }
+        },
+        {
+          "name": "Get Seed Bid Lot Bids",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedBidLotId}}/bids?page=1&pageSize=20&orderBy=CreatedAt&isAsc=false"
+          }
+        },
+        {
+          "name": "Generate Manual Lot",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "if (json.items && json.items.length > 0) {",
+                  "  pm.collectionVariables.set('generatedLotId', json.items[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": 1,\n  \"title\": \"Postman Generated Mandarin\",\n  \"description\": \"Лот, созданный из Postman для проверки ручной генерации.\",\n  \"imageUrl\": \"https://cdn.example.com/tangerines/postman-generated.png\",\n  \"startPrice\": 130.0,\n  \"buyoutPrice\": 300.0,\n  \"auctionStartAt\": \"2026-04-02T10:00:00Z\",\n  \"auctionEndAt\": \"2026-12-31T10:00:00Z\",\n  \"expirationAt\": \"2027-01-03T10:00:00Z\"\n}"
+            },
+            "url": "{{baseUrl}}/Lots/generate"
+          }
+        },
+        {
+          "name": "Get Generated Lot",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{generatedLotId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bid Flow",
+      "item": [
+        {
+          "name": "Place First Bid by Bidder 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{bidder1Token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 150.0\n}"
+            },
+            "url": "{{baseUrl}}/Lots/{{seedBidLotId}}/bids"
+          }
+        },
+        {
+          "name": "Place Second Bid by Bidder 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{bidder2Token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 200.0\n}"
+            },
+            "url": "{{baseUrl}}/Lots/{{seedBidLotId}}/bids"
+          }
+        },
+        {
+          "name": "Process Outbox After Outbid",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Jobs/process-outbox"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Buyout Flow",
+      "item": [
+        {
+          "name": "Buyout Lot by Buyer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{buyerToken}}" }],
+            "url": "{{baseUrl}}/Lots/{{seedBuyoutLotId}}/buyout"
+          }
+        },
+        {
+          "name": "Process Outbox After Buyout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Jobs/process-outbox"
+          }
+        },
+        {
+          "name": "Get Buyout Lot",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedBuyoutLotId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Background Jobs",
+      "item": [
+        {
+          "name": "Complete Ended Auctions",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Jobs/complete-ended-auctions"
+          }
+        },
+        {
+          "name": "Process Outbox After Auction Completion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Jobs/process-outbox"
+          }
+        },
+        {
+          "name": "Get Ended Winner Lot",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedEndedWinnerLotId}}"
+          }
+        },
+        {
+          "name": "Get Ended No Winner Lot",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedEndedWithoutWinnerLotId}}"
+          }
+        },
+        {
+          "name": "Cleanup Expired Lots",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/Jobs/cleanup-expired-lots"
+          }
+        },
+        {
+          "name": "Get Expired Spoiled Lot (Expect 404 After Cleanup)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/Lots/{{seedExpiredSpoiledLotId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "MailHog Optional",
+      "item": [
+        {
+          "name": "Get MailHog Messages",
+          "request": {
+            "method": "GET",
+            "url": "{{mailhogUrl}}/api/v2/messages"
+          }
+        }
+      ]
+    }
+  ]
+}

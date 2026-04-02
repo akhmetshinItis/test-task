@@ -22,7 +22,17 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Vitacore.Test.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM build AS publish-migrator
+ARG BUILD_CONFIGURATION=Release
+WORKDIR "/src/src/Vitacore.Test.Migrator"
+RUN dotnet publish "./Vitacore.Test.Migrator.csproj" -c $BUILD_CONFIGURATION -o /app/publish-migrator /p:UseAppHost=false
+
+FROM base AS web
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Vitacore.Test.Web.dll"]
+
+FROM base AS migrator
+WORKDIR /app
+COPY --from=publish-migrator /app/publish-migrator .
+ENTRYPOINT ["dotnet", "Vitacore.Test.Migrator.dll"]

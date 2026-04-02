@@ -1,0 +1,97 @@
+x-db-connection-string: &db_connection_string User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=Vitacore;Pooling=true;
+
+x-email-environment: &email_environment
+  Email__Host: mailhog
+  Email__Port: "1025"
+  Email__EnableSsl: "false"
+  Email__UseDefaultCredentials: "false"
+  Email__UserName: ""
+  Email__Password: ""
+  Email__FromAddress: noreply@vitacore.test
+  Email__FromName: Vitacore.Test
+
+x-hangfire-environment: &hangfire_environment
+  Hangfire__EnableDashboard: "true"
+  Hangfire__ConnectionString: *db_connection_string
+  Hangfire__DashboardPath: /hangfire
+  Hangfire__WorkerCount: "5"
+  Hangfire__ProcessOutboxMessagesCron: "* * * * *"
+  Hangfire__CompleteEndedAuctionsCron: "* * * * *"
+  Hangfire__CleanupExpiredLotsCron: "0 0 * * *"
+  Hangfire__GenerateTangerineLotsCron: "*/5 * * * *"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: vitacore-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: Vitacore
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - vitacore-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d Vitacore" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: vitacore-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+    container_name: vitacore-migrator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Development
+      Application__DbConnectionString: *db_connection_string
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    container_name: vitacore-web
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+      migrator:
+        condition: service_completed_successfully
+    environment:
+      <<: [ *hangfire_environment, *email_environment ]
+      ASPNETCORE_ENVIRONMENT: Development
+      DOTNET_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      Application__DbConnectionString: *db_connection_string
+      Jwt__Issuer: Vitacore.Test
+      Jwt__Audience: Vitacore.Test.Client
+      Jwt__SigningKey: super-secret-signing-key-for-vitacore-test
+      Jwt__AccessTokenLifetimeMinutes: "60"
+      AdminUser__UserName: admin
+      AdminUser__Email: admin@vitacore.test
+      AdminUser__Password: Admin123
+    ports:
+      - "5109:8080"
+
+volumes:
+  vitacore-postgres-data:
