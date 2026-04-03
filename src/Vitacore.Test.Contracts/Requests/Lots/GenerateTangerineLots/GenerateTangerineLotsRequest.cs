@@ -2,7 +2,6 @@ namespace Vitacore.Test.Contracts.Requests.Lots.GenerateTangerineLots
 {
     public class GenerateTangerineLotsRequest
     {
-        public int Count { get; set; } = 1;
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;

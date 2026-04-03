@@ -9,7 +9,6 @@ namespace Vitacore.Test.Core
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Entry)));
-            services.AddScoped<ITangerineLotGenerator, TangerineLotGenerator>();
             services.AddScoped<ITangerineLotBackgroundGenerator, TangerineLotBackgroundGenerator>();
             
             return services;
